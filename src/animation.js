@@ -83,6 +83,19 @@ var Animation = function () {
      */
     this.isFinished = function () { return finished; };
 
+    this.getTime = function () {
+        return Math.round(this.playTime * (fNum / ani.frames.length));
+    };
+
+    // this.getDuration = function () {
+    //     var res = 0;
+    //     for (var i = ani.frames.length - 1; i >= 0; i--) {
+    //         var frame = ani.frames[i];
+    //         res += frame.delay;
+    //     }
+    //     return res;
+    // };
+
     // Private
 
     var ani = this,
@@ -94,6 +107,9 @@ var Animation = function () {
         contexts = [];
 
     var tick = function (now) {
+        if (500 < now - nextRenderTime) {
+            nextRenderTime = now;
+        }
         while (played && nextRenderTime <= now) renderFrame(now);
         if (played) requestAnimationFrame(tick);
     };
@@ -129,7 +145,7 @@ var Animation = function () {
             nextRenderTime += frame.delay;
         } else {
             played = false;
-            finished = false;
+            finished = true;
         }
     };
 };
